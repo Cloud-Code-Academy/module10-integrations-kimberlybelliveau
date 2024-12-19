@@ -19,10 +19,21 @@
 trigger ContactTrigger on Contact(before insert) {
 	// When a contact is inserted
 	// if DummyJSON_Id__c is null, generate a random number between 0 and 100 and set this as the contact's DummyJSON_Id__c value
+	if (Trigger.isBefore && Trigger.isInsert){
+		ContactTriggerHandler.setJsonId(Trigger.new);
+	}
 
 	//When a contact is inserted
 	// if DummyJSON_Id__c is less than or equal to 100, call the getDummyJSONUserFromId API
+	if (Trigger.isAfter && Trigger.isInsert){
+		ContactTriggerHandler.startJsonCalloutGetUser(Trigger.new);
+	}
 
 	//When a contact is updated
 	// if DummyJSON_Id__c is greater than 100, call the postCreateDummyJSONUser API
+	if (Trigger.isAfter && Trigger.isUpdate){
+		ContactTriggerHandler.startJsonCalloutCreateUser(Trigger.new);
+	}
+
 }
+	
